@@ -17,17 +17,9 @@ on:
         type: string
   
 jobs:
-  build-java-maven:
-    if: ${{ inputs.event_name == 'java-maven-pipeline-scan' || inputs.event_name == 'java-maven-policy-scan' || inputs.event_name == 'java-maven-sandbox-scan' }}
-    uses: ./.github/workflows/veracode-build-java-cli-maven.yml
-    with:
-      repository: ${{ inputs.repository }}
-      ref: ${{ inputs.ref }}
-      token: ${{ inputs.token }}
-
-  build-java-gradle:
-    if: ${{ inputs.event_name == 'java-gradle-pipeline-scan' || inputs.event_name == 'java-gradle-policy-scan' || inputs.event_name == 'java-gradle-sandbox-scan' }}
-    uses: ./.github/workflows/veracode-build-java-cli-gradle.yml
+  build:
+    if: ${{ inputs.event_name == 'java-pipeline-scan' || inputs.event_name == 'java-policy-scan' || inputs.event_name == 'java-sandbox-scan' || inputs.event_name == 'unidentified-lang-pipeline-scan' || inputs.event_name == 'unidentified-lang-policy-scan' || inputs.event_name == 'unidentified-lang-sandbox-scan' }}
+    uses: ./.github/workflows/veracode-default-build.yml
     with:
       repository: ${{ inputs.repository }}
       ref: ${{ inputs.ref }}

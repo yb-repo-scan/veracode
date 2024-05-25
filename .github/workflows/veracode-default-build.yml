@@ -1,0 +1,52 @@
+name: Veracode Build
+on:
+  workflow_call:
+    inputs:
+      repository:
+        required: true
+        type: string
+      ref:
+        required: true
+        type: string
+      token:
+        required: true
+        type: string
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: acckarthikbharadwaj/java-maven-gradle:latest
+    env:
+      VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
+      VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ inputs.repository }}
+        ref: ${{ inputs.ref }}
+        token: ${{ inputs.token }}
+
+    - uses: actions/checkout@v4
+      with:
+        path: 'veracode-helper'
+
+    - name: Package the appliccation
+      env:
+        VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
+        VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
+      run: |
+        cd veracode-helper/helper/cli
+        cliFile=$(ls -1 . | head -n 1)
+        cliFileName=$(echo "$cliFile" | cut -c 1-$((${#cliFile}-7)))
+        tar -zxvf $cliFile
+        cd $cliFileName
+        export PATH="veracode-helper/helper/cli/$cliFileName:$PATH"
+        cd /__w/veracode/veracode
+        veracode package --source . --output veracode-artifacts --trust
+        zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
+
+    - uses: actions/upload-artifact@v4
+      with:
+        name: veracode-artifact
+        path: /__w/veracode/veracode/veracode-artifact.zip
+        if-no-files-found: error
