@@ -8,8 +8,7 @@ concurrency:
 on:
   repository_dispatch:
     types:
-      - java-maven-sandbox-scan
-      - java-gradle-sandbox-scan
+      - java-sandbox-scan
       - source-code-sandbox-scan
       - dot-net-sandbox-scan
       - go-sandbox-scan
@@ -18,6 +17,7 @@ on:
       - php-sandbox-scan
       - scala-sandbox-scan
       - dart-sandbox-scan
+      - unidentified-lang-sandbox-scan
 
 jobs:
   build:
