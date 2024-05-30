@@ -45,6 +45,11 @@ jobs:
         veracode package --source . --output veracode-artifacts --trust
         zip veracode-artifact.zip veracode-artifacts/* -x .zip .tar .tar.gz .gz
 
+    - name: Package error
+      if: failure() && steps.application_package.outcome == 'failure'
+      run: |
+        echo "::error::Veracode static scan faced a problem. Please contact your Veracode administrator for more information."
+
     - uses: actions/upload-artifact@v4
       with:
         name: veracode-artifact
