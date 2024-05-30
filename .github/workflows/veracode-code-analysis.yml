@@ -11,7 +11,6 @@ on:
     types: 
       - java-pipeline-scan
       - java-policy-scan
-      - java-sandbox-scan
       - source-code-pipeline-scan
       - source-code-policy-scan
       - dot-net-pipeline-scan
@@ -30,7 +29,6 @@ on:
       - dart-policy-sca
       - unidentified-lang-pipeline-scan
       - unidentified-lang-policy-scan
-      - unidentified-lang-sandbox-scan
 
 jobs:
   register:
