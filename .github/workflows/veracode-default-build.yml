@@ -31,6 +31,7 @@ jobs:
         path: 'veracode-helper'
 
     - name: Package the application
+      id: application_package
       env:
         VERACODE_API_KEY_ID: '${{ secrets.VERACODE_API_ID }}'
         VERACODE_API_KEY_SECRET: '${{ secrets.VERACODE_API_KEY }}'
